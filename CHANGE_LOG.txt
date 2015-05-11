@@ -1,0 +1,34 @@
+==========================================================
+Repast HPC 2.0  Change Log
+
+Release Date: 13 August 2013
+==========================================================
+
+The most significant change to Repast HPC Version 2.0
+is the revision of cross-process synchronization, which
+has been virtually entirely rewritten. See the manual
+and the included demos for documentation and details.
+
+
+The other change is that te hierarchy of spatial objects 
+has been changed to reflect standard naming; there are now 
+only 'DiscreteSpaces' and 'ContinuousSpaces' not 'Grids'
+and 'Spaces'. Additionally, Continuous Spaces can now
+have boundaries at non-integer points. ReLogo spaces
+now align at the .5 boundary instead of on the integer.
+
+
+Bug Fixes:
+
+1) Use reference, not copy, in TurtlesOn
+
+2) AgentStateFilters use common communicator
+
+3) CountsOfRequests array uninitialized causing spurious data
+in RepastProcess initiateAgentRequest
+
+4) Reconcile names of provideEdgeContent in Repast 
+and ReLogo code
+
+
+
