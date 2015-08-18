@@ -10,6 +10,10 @@ NETCDF_INCLUDE_DIR=./
 NETCDF_LIB_DIR=./
 CURL_INCLUDE_DIR=./
 CURL_LIB_DIR=./
+HDF5_INCLUDE_DIR=./
+HDF5_LIB_DIR=./
+HDF5_LIBS=$(HDF5_LIB_DIR)/libhdf5_hl.a $(HDF5_LIB_DIR)/libhdf5.a -lz
+
 
 # DIRECTORIES 
 SRC_DIR=../src
@@ -17,6 +21,7 @@ REPAST_HPC_DIR=../src/repast_hpc
 RELOGO_DIR=../src/relogo
 RUMOR_DIR=../src/rumor_model
 ZOMBIE_DIR=../src/zombies
+HZOMBIE_DIR=../src/hzombies
 
 # DERIVED VARIABLES (Do not modify)
 I_REPAST=-I$(REPAST_HPC_DIR)
@@ -59,13 +64,17 @@ ZOMBIE_SOURCES=$(addprefix $(ZOMBIE_DIR)/, \
 Human.cpp   InfectionSum.cpp   Zombie.cpp   ZombieObserver.cpp \
 main.cpp)
 
+# HZombie Model
+HZOMBIE_SOURCES=$(addprefix $(HZOMBIE_DIR)/, \
+main.cpp Zombie.cpp Human.cpp ZombieObserver.cpp InfectionSum.cpp)
+
 
 # OBJECT FILES
 REPAST_HPC_OBJECTS=$(patsubst %.cpp,%.o,$(REPAST_HPC_SOURCES))
 RELOGO_OBJECTS=$(patsubst %.cpp,%.o,$(RELOGO_SOURCES))
 RUMOR_OBJECTS=$(patsubst %.cpp,%.o,$(RUMOR_SOURCES))
 ZOMBIE_OBJECTS=$(patsubst %.cpp,%.o,$(ZOMBIE_SOURCES))
-
+HZOMBIE_OBJECTS=$(patsubst %.cpp,%.o,$(HZOMBIE_SOURCES))
 
 # TARGETS
 REPAST_VERSION=2.0
@@ -75,6 +84,7 @@ RELOGO_NAME=relogo-$(REPAST_VERSION)
 RELOGO_LIB=../lib/lib$(RELOGO_NAME).a
 RUMOR_EXE=../bin/rumor_model
 ZOMBIE_EXE=../bin/zombie_model
+HZOMBIE_EXE=../bin/hzombie_model
 
 l_REPAST_HPC=-l$(REPAST_HPC_NAME)
 l_RELOGO=-l$(RELOGO_NAME)
@@ -115,6 +125,12 @@ $(ZOMBIE_EXE): $(REPAST_HPC_LIB) $(RELOGO_LIB) $(ZOMBIE_OBJECTS)
 	cp $(ZOMBIE_DIR)/model.props ../bin/zombie_model.props
 	$(CXXLD) -L../lib/ $(L_BOOST) $(L_NETCDF) $(L_CURL) $(ZOMBIE_OBJECTS) $(l_NETCDF) $(l_CURL) $(l_RELOGO) $(l_REPAST_HPC) $(l_BOOST) -o $(ZOMBIE_EXE)
 
+$(HZOMBIE_EXE): $(REPAST_HPC_LIB) $(RELOGO_LIB) $(HZOMBIE_OBJECTS)
+	mkdir -p ../bin
+	cp $(HZOMBIE_DIR)/config.props ../bin/hzombie_config.props
+	cp $(HZOMBIE_DIR)/model.props ../bin/hzombie_model.props
+	$(CXXLD) -L../lib/ $(L_BOOST) $(L_NETCDF) $(L_CURL) $(HZOMBIE_OBJECTS) $(l_NETCDF) $(l_CURL) $(l_RELOGO) $(l_REPAST_HPC) $(l_BOOST) -o $(HZOMBIE_EXE)
+
 # User-friendly names
 .PHONY : repast_hpc
 repast_hpc: $(REPAST_HPC_LIB)
@@ -127,7 +143,9 @@ rumor_model: $(RUMOR_EXE)
 	
 .PHONY : zombie_model
 zombie_model: $(ZOMBIE_EXE)
-	
+
+.PHONY: hzombie_model
+hzombie_model: $(HZOMBIE_EXE)
 
 # Cleanup
 .PHONY : repast_hpc_clean
@@ -150,8 +168,13 @@ zombie_clean :
 	rm -f $(ZOMBIE_EXE)
 	rm -f $(ZOMBIE_DIR)/*.o
 
+.PHONY : hzombie_clean
+hzombie_clean:
+	rm -f $(HZOMBIE_EXE)
+	rm -f $(HZOMBIE_DIR)/*.o
+
 .PHONY : clean
-clean: repast_hpc_clean relogo_clean rumor_clean zombie_clean
+clean: repast_hpc_clean relogo_clean rumor_clean zombie_clean hzombie_clean
 
 .PHONY : distclean
 distclean: clean
