@@ -6,13 +6,12 @@ CXXLD=mpicxx -static
 BOOST_INCLUDE_DIR=./
 BOOST_LIB_DIR=./
 BOOST_INFIX=-mt-s
-NETCDF_INCLUDE_DIR=./
-NETCDF_LIB_DIR=./
-CURL_INCLUDE_DIR=./
-CURL_LIB_DIR=./
-HDF5_INCLUDE_DIR=./
-HDF5_LIB_DIR=./
-HDF5_LIBS=$(HDF5_LIB_DIR)/libhdf5_hl.a $(HDF5_LIB_DIR)/libhdf5.a -lz
+NETCDF_INCLUDE_DIR=../ext/NetCDF/include
+NETCDF_LIB_DIR=../ext/NetCDF/lib
+CURL_INCLUDE_DIR=../CURL/include
+CURL_LIB_DIR=../CURL/lib
+HDF5_INCLUDE_DIR=/N/soft/rhel6/hdf5/intel/mpi/1.8.14/include
+HDF5_LIB_DIR=/N/soft/rhel6/hdf5/intel/mpi/1.8.14/lib
 
 
 # DIRECTORIES 
@@ -34,6 +33,9 @@ l_NETCDF=-lnetcdf_c++ -lnetcdf
 I_CURL=-I$(CURL_INCLUDE_DIR)
 L_CURL=-L$(CURL_LIB_DIR)
 l_CURL=-lcurl
+I_HDF5=-I$(HDF5_INCLUDE_DIR)
+L_HDF5=-L$(HDF5_LIB_DIR)
+l_HDF5=$(HDF5_LIB_DIR)/libhdf5_hl.a $(HDF5_LIB_DIR)/libhdf5.a -lz
 
 
 # SOURCE FILES
@@ -129,7 +131,7 @@ $(HZOMBIE_EXE): $(REPAST_HPC_LIB) $(RELOGO_LIB) $(HZOMBIE_OBJECTS)
 	mkdir -p ../bin
 	cp $(HZOMBIE_DIR)/config.props ../bin/hzombie_config.props
 	cp $(HZOMBIE_DIR)/model.props ../bin/hzombie_model.props
-	$(CXXLD) -L../lib/ $(L_BOOST) $(L_NETCDF) $(L_CURL) $(HZOMBIE_OBJECTS) $(l_NETCDF) $(l_CURL) $(l_RELOGO) $(l_REPAST_HPC) $(l_BOOST) -o $(HZOMBIE_EXE)
+	$(CXXLD) -L../lib/ $(L_BOOST) $(L_NETCDF) $(L_CURL) $(L_HDF5) $(HZOMBIE_OBJECTS) $(l_NETCDF) $(l_CURL) $(l_RELOGO) $(l_REPAST_HPC) $(l_BOOST) $(l_HDF5) -o $(HZOMBIE_EXE)
 
 # User-friendly names
 .PHONY : repast_hpc
@@ -185,7 +187,7 @@ distclean: clean
 
 # Object files are built from cpp files
 %.o:
-	$(CXX) -c $(I_BOOST) $(I_NETCDF) $(I_CURL) -I$(SRC_DIR) -o $@ $*.cpp
+	$(CXX) -c $(I_BOOST) $(I_NETCDF) $(I_CURL) $(I_HDF5) -I$(SRC_DIR) -o $@ $*.cpp
 	
 # Cancel implicit rule for name with no suffix, to avoid confusing output:
 %: %.o
