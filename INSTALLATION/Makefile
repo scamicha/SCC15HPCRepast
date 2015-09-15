@@ -1,18 +1,17 @@
 # Repast HPC Manual Build Makefile
 
 # VARIABLES (Supply values for these; for definitions and examples, see INSTALL)
-CXX=mpicxx
-CXXLD=mpicxx -static
-BOOST_INCLUDE_DIR=../ext/Boost/Boost_1.54/include
-BOOST_LIB_DIR=../ext/Boost/Boost_1.54/lib
+CXX=
+CXXLD=
+BOOST_INCLUDE_DIR=boost/include
+BOOST_LIB_DIR=boost/lib
 BOOST_INFIX=-mt-s
-NETCDF_INCLUDE_DIR=../ext/NetCDF/include
-NETCDF_LIB_DIR=../ext/NetCDF/lib
-CURL_INCLUDE_DIR=../ext/CURL/include
-CURL_LIB_DIR=../ext/CURL/lib
-HDF5_INCLUDE_DIR=/N/soft/rhel6/hdf5/gnu/mpi/1.8.14/include
-HDF5_LIB_DIR=/N/soft/rhel6/hdf5/gnu/mpi/1.8.14/lib
-Z_LIB_DIR=/N/u/scamicha/Karst/lib/lib
+NETCDF_INCLUDE_DIR=NetCDF/include
+NETCDF_LIB_DIR=NetCDF/lib
+CURL_INCLUDE_DIR=CURL/include
+CURL_LIB_DIR=CURL/lib
+HDF5_INCLUDE_DIR=hdf5/include
+HDF5_LIB_DIR=hdf5/lib
 
 
 # DIRECTORIES 
@@ -95,7 +94,7 @@ l_RELOGO=-l$(RELOGO_NAME)
 
 # Default rule makes everything
 .PHONY : all
-all: copy_includes repast_hpc relogo rumor_model zombie_model
+all: copy_includes repast_hpc relogo rumor_model zombie_model hzombie_model
 
 .PHONY : copy_includes
 copy_includes:
