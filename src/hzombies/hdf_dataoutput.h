@@ -1,8 +1,9 @@
 /*
  *
  * HDF5 Write
+ * Created for SC15 Student Cluster Competition.
  *
- * Hoony Park, ORNL
+ * Author: Byung H. Park, Oak Ridge National Laboratory
  *
  */
 #ifndef HDF_DATA_OUTPUT_H
@@ -30,11 +31,11 @@ private:
     int worldsize_y;
     int iteration;
     bool closed;
-    int communicator;
+    MPI_Comm communicator;
     int total_iterations;
 
 public:
-    HdfDataOutput(std::string fname, std::string dname, int myrank,hid_t type, int comm);
+    HdfDataOutput(std::string fname, std::string dname, int myrank,hid_t type, MPI_Comm comm);
     virtual ~HdfDataOutput();
     void configure(int total_iterations, int block_size_y, int block_size_x, int num_procs_y, int num_procs_x, int rank);
     void write(T *data);
@@ -42,7 +43,7 @@ public:
 };
 
 template<typename T>
-HdfDataOutput<T>::HdfDataOutput(std::string fname, std::string dname, int myrank, hid_t type, int comm) 
+HdfDataOutput<T>::HdfDataOutput(std::string fname, std::string dname, int myrank, hid_t type, MPI_Comm comm) 
 : filename(fname), dataname(dname), mpi_rank(myrank), h5_datatype(type), communicator(comm)
 {
     iteration = 0;

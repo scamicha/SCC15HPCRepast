@@ -1,3 +1,11 @@
+/**
+ *
+ * Created for SC15 Student Cluster Competetion.
+ *
+ * Author: Byung H. Park, Oak Ridge National Laboratory
+ *
+ */
+
 #ifndef patch_utils_h
 #define patch_utils_h
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import sys, getopt
 import h5py
 from numpy import genfromtxt

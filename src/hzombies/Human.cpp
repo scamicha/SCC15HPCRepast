@@ -1,3 +1,12 @@
+/**                                                                                                                                                                                                         
+ *                                                                                                                                                                                                          
+ * Modified and extended for SC15 Student cluster competetion.            
+ *                                                                                                                                                                                                          
+ * Author: Byung H. Park, Oak Ridge National Laboratory                                                                                                                                                     
+ *                                                                                                                                                                                                          
+ */
+
+
 /*
  *   Repast for High Performance Computing (Repast HPC)
  *

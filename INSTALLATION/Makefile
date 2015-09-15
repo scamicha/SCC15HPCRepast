@@ -3,15 +3,16 @@
 # VARIABLES (Supply values for these; for definitions and examples, see INSTALL)
 CXX=mpicxx
 CXXLD=mpicxx -static
-BOOST_INCLUDE_DIR=./
-BOOST_LIB_DIR=./
+BOOST_INCLUDE_DIR=../ext/Boost/Boost_1.54/include
+BOOST_LIB_DIR=../ext/Boost/Boost_1.54/lib
 BOOST_INFIX=-mt-s
 NETCDF_INCLUDE_DIR=../ext/NetCDF/include
 NETCDF_LIB_DIR=../ext/NetCDF/lib
-CURL_INCLUDE_DIR=../CURL/include
-CURL_LIB_DIR=../CURL/lib
-HDF5_INCLUDE_DIR=/N/soft/rhel6/hdf5/intel/mpi/1.8.14/include
-HDF5_LIB_DIR=/N/soft/rhel6/hdf5/intel/mpi/1.8.14/lib
+CURL_INCLUDE_DIR=../ext/CURL/include
+CURL_LIB_DIR=../ext/CURL/lib
+HDF5_INCLUDE_DIR=/N/soft/rhel6/hdf5/gnu/mpi/1.8.14/include
+HDF5_LIB_DIR=/N/soft/rhel6/hdf5/gnu/mpi/1.8.14/lib
+Z_LIB_DIR=/N/u/scamicha/Karst/lib/lib
 
 
 # DIRECTORIES 
@@ -34,7 +35,7 @@ I_CURL=-I$(CURL_INCLUDE_DIR)
 L_CURL=-L$(CURL_LIB_DIR)
 l_CURL=-lcurl
 I_HDF5=-I$(HDF5_INCLUDE_DIR)
-L_HDF5=-L$(HDF5_LIB_DIR)
+L_HDF5=-L$(HDF5_LIB_DIR) -L$(Z_LIB_DIR)
 l_HDF5=$(HDF5_LIB_DIR)/libhdf5_hl.a $(HDF5_LIB_DIR)/libhdf5.a -lz
 
 

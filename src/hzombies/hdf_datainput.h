@@ -1,7 +1,7 @@
 /*
  *      HDF5 Read
- *  
- *      Author: Hoony Park, ORNL
+ *      Created for SC 15 Student Cluster competition.
+ *      Author: Byung H. Park, Oak Ridge National Laboratory
  */
 
 #ifndef HDF_DATA_INPUT_H
@@ -36,9 +36,9 @@ private:
     int xprocs;
     int yprocs;
     hid_t h5_datatype;
-    int communicator;
+    MPI_Comm communicator;
 public:
-    HdfDataInput(int myrank, int procs_x, int procs_y, hid_t type, int comm);
+    HdfDataInput(int myrank, int procs_x, int procs_y, hid_t type, MPI_Comm comm);
     virtual ~HdfDataInput();
     int open(std::string filename, std::string groupname, std::string dataname, int *dim);
     int read(T*);
@@ -46,7 +46,7 @@ public:
 };
 
 template<typename T>
-HdfDataInput<T>::HdfDataInput(int myrank, int procs_x, int procs_y, hid_t type, int comm) 
+HdfDataInput<T>::HdfDataInput(int myrank, int procs_x, int procs_y, hid_t type, MPI_Comm comm) 
 : mpi_rank(myrank), xprocs(procs_x), yprocs(procs_y), h5_datatype(type), communicator(comm)
 {
     rindex = 0; cindex = 1; tindex = 2;
