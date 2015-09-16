@@ -4,15 +4,15 @@ The SC15 Student Cluster Competition will use a modified version of the zombie m
 ## Installation
 The installation of the modified zombie model follows the basic instructions presented in the INSTALL.txt files. However, there is an additional requirement of an HDF5 library. After installing a version of HDF5 > 1.8.14, modify the makefile to reference the installed HDF5 libraries. Following installation of all prerequisites (using the install.sh script if you wish) and all appropriate makefile modifications a
 
-make hzombie_model
+`make hzombie_model`
 
 should build all of the modified zombie model code and its prerequisite HPC Repast libraries.
 
 ## Configuration and Input
 The configuration file `model.props` contains the variables for human and zombie input files. Here we describe the human files, but the zombie files are similar.
-*`human.input.file` the file containing the HDF5 input of the initial human distribution
-*`human.output.file` the file to hold the output of the human distribution at the given cadence
-*`human.dataname` the name of the HDF5 data block
+* `human.input.file` the file containing the HDF5 input of the initial human distribution
+* `human.output.file` the file to hold the output of the human distribution at the given cadence
+* `human.dataname` the name of the HDF5 data block
 
 In addition, the variable `output.interval` has been added to determine the frequency in timesteps at which the human and zombie population distributions are written to the output file.
 
