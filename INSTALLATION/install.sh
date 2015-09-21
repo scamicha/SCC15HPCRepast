@@ -7,7 +7,7 @@ cd ..
 BASE_DIR=$PWD/ext/
 cd INSTALLATION
 
-MPI_COMPILER_INVOCATION=/N/soft/rhel6/openmpi/intel/1.8.4/bin/mpicxx
+MPI_COMPILER_INVOCATION=
 
 
 # cURL
