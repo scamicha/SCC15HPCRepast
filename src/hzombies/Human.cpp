@@ -94,10 +94,8 @@ void Human::step() {
 		// are there any zombies in the ngh
 		AgentSet<Patch> nghs = patchHere<Patch> ()->neighbors<Patch> ();
 		Patch* winningPatch = nghs.minOneOf(CountZombiesOnPatch());
+
 		face(winningPatch);
-//		double distanceToMove = 1.5; // For non-toroidal worlds, need to check to make sure move is not out of bounds
-//		while((_observer->patchAtOffset(location(), heading(), distanceToMove) == 0) && (distanceToMove > 0)) distanceToMove--;
-//	  if(distanceToMove > 0) move(distanceToMove);
 		move(.5);
 	}
 }

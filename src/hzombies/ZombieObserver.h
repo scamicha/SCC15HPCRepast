@@ -56,7 +56,12 @@ private:
 	int zombieType, humanType;
 	int _infectionCount;
 
-
+	std::string human_outfile;
+	std::string human_dataname;
+	std::string zombie_outfile;
+	std::string zombie_dataname;
+	int world_x, world_y;
+	
 	// Added by Hoony Park
 	std::map<const std::type_info*, int, repast::relogo::TypeInfoCmp> idMap;
 
@@ -77,6 +82,7 @@ private:
 	    void readAgents(repast::Properties &props, std::string filename, std::string groupname, std::string dataname);
 	
 	void setupOutputs(repast::Properties& props, std::string humanfile, std::string human_dataname, std::string zombiefile, std::string zombie_dataname);
+	void openOutputs();
 
 	void snapshot();
 	void closeOutputs();

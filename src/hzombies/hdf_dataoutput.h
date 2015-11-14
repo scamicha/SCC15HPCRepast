@@ -26,25 +26,23 @@ private:
     std::string filename;
     std::string dataname;
     hid_t h5_datatype;
-    int mpi_rank;
-    int xprocs;
     int worldsize_y;
     int iteration;
     bool closed;
-    MPI_Comm communicator;
+    int communicator;
     int total_iterations;
 
 public:
-    HdfDataOutput(std::string fname, std::string dname, int myrank,hid_t type, MPI_Comm comm);
+    HdfDataOutput(std::string fname, std::string dname, hid_t type, int comm);
     virtual ~HdfDataOutput();
-    void configure(int total_iterations, int block_size_y, int block_size_x, int num_procs_y, int num_procs_x, int rank);
+    void configure(int total_iterations, int *datasize, int *origin, int *extents);
     void write(T *data);
     void close();
 };
 
 template<typename T>
-HdfDataOutput<T>::HdfDataOutput(std::string fname, std::string dname, int myrank, hid_t type, MPI_Comm comm) 
-: filename(fname), dataname(dname), mpi_rank(myrank), h5_datatype(type), communicator(comm)
+HdfDataOutput<T>::HdfDataOutput(std::string fname, std::string dname, hid_t type, int comm) 
+: filename(fname), dataname(dname), h5_datatype(type), communicator(comm)
 {
     iteration = 0;
     closed = false;
@@ -63,11 +61,9 @@ HdfDataOutput<T>::~HdfDataOutput()
 }
 
 template<typename T>
-void HdfDataOutput<T>::configure(int total, int block_size_y, int block_size_x, int num_procs_y, int num_procs_x, int rank)
+void HdfDataOutput<T>::configure(int total, int *datasize, int *origin, int *extents)
 {
-    mpi_rank = rank;
-    worldsize_y = block_size_y * num_procs_y;
-    xprocs = num_procs_x;
+    worldsize_y = datasize[0];
     total_iterations = total;
 
     /**
@@ -79,11 +75,11 @@ void HdfDataOutput<T>::configure(int total, int block_size_y, int block_size_x, 
     file_id = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
     H5Pclose(plist_id);
 
-    dimsf[0] = worldsize_y * total_iterations;
-    dimsf[1] = block_size_x * xprocs;
+    dimsf[0] = datasize[0] * total_iterations;
+    dimsf[1] = datasize[1];
 
-    dimsm[0] = block_size_y;
-    dimsm[1] = block_size_x;
+    dimsm[0] = extents[0]; 
+    dimsm[1] = extents[1];
 
     filespace = H5Screate_simple(2, dimsf, NULL);
     memspace  = H5Screate_simple(2, dimsm, NULL);
@@ -100,10 +96,8 @@ void HdfDataOutput<T>::configure(int total, int block_size_y, int block_size_x, 
     block[0] = dimsm[0];
     block[1] = dimsm[1];
 
-    // offset[0] will be set ...
-    offset[1] = block[1] * (mpi_rank % xprocs);
-
-    count[0]  = dimsm[0]; count[1]  = dimsm[1];
+    offset[0] = origin[0];
+    offset[1] = origin[1];
 
     stride[0] = stride[1] = 1;
     count[0] = count[1] = 1;
@@ -116,11 +110,14 @@ void HdfDataOutput<T>::configure(int total, int block_size_y, int block_size_x, 
 template<typename T>
 void HdfDataOutput<T>::write(T *data)
 {
+    hsize_t new_offset[2];
+    new_offset[1] = offset[1];
+    new_offset[0] = worldsize_y * iteration + offset[0];
+
     if ( iteration < total_iterations ) {
-    offset[0] = worldsize_y * iteration + block[0] * (mpi_rank / xprocs);
-    H5Sselect_hyperslab(filespace, H5S_SELECT_SET, offset, stride, count, block);
-    herr_t status = H5Dwrite(dset_id, h5_datatype, memspace, filespace, plist_id, data);
-    iteration++;
+	H5Sselect_hyperslab(filespace, H5S_SELECT_SET, new_offset, stride, count, block);
+	herr_t status = H5Dwrite(dset_id, h5_datatype, memspace, filespace, plist_id, data);
+	iteration++;
     }
 }
 
